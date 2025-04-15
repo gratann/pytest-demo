@@ -15,16 +15,17 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                echo "🐍 Installing dependencies..."
+                echo "🐍 Creating virtual environment & installing requirements..."
                 bat "python -m venv %VENV_DIR%"
+                bat ".\\%VENV_DIR%\\Scripts\\pip install --upgrade pip"
                 bat ".\\%VENV_DIR%\\Scripts\\pip install -r requirements.txt"
             }
         }
 
         stage('Run Tests') {
             steps {
-                echo "🧪 Running tests..."
-                bat ".\\%VENV_DIR%\\Scripts\\pytest --junitxml=report.xml"
+                echo "🧪 Running pytest with JUnit report output..."
+                bat "set PYTHONPATH=%CD% && .\\%VENV_DIR%\\Scripts\\pytest --junitxml=report.xml"
             }
         }
 
